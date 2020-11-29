@@ -1,0 +1,42 @@
+{{- define "common.migration-job.tpl" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  {{ include "fullname" . }}-migration
+  labels:
+    {{- include "labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-migration
+        image: boxfuse/flyway:5.2.4
+        args:
+          - info
+          - repair
+          - migrate
+          - info
+        env:
+          - name: FLYWAY_URL
+            value: {{ .Values.migration.database.url | quote }}
+          - name: FLYWAY_USER
+            value: {{ .Values.migration.database.user | quote }}
+          - name: FLYWAY_PASSWORD
+            value: {{ .Values.migration.database.password | quote }} 
+        volumeMounts:
+          - mountPath: /flyway/sql
+            name: sql
+          - mountPath: /flyway/conf
+            name: conf
+      volumes:
+        - name: sql
+          configMap:
+            name: {{ include "fullname" . }}-sql-migration-configmap
+        - name: conf
+          configMap:
+            name: {{ include "fullname" . }}-conf-migration-configmap
+      restartPolicy: Never
+{{- end -}}
+{{- define "common.migration-job" -}}
+{{- include "common.util.merge" (append . "common.migration-job.tpl") -}}
+{{- end -}}

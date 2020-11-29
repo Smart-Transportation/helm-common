@@ -1,0 +1,35 @@
+{{- define "common.ingress.tpl" }}
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "fullname" . -}}
+{{- $svcPort := .Values.service.apiPort -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+  {{- if eq .Release.Namespace "prod" }}
+    - host: {{ .Values.service.apiHost | quote }}
+  {{- else }}
+    - host: {{ printf "%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
+  {{- end }}
+      http:
+        paths:
+          - path: /{{ .Chart.Name }}/graphql
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port: 
+                  number: {{ $svcPort }}
+{{- end }}
+{{- end -}}
+{{- define "common.ingress" -}}
+{{- include "common.util.merge" (append . "common.ingress.tpl") -}}
+{{- end -}}
