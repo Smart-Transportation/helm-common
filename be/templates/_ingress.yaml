@@ -1,7 +1,7 @@
 {{- define "common.ingress.tpl" }}
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "fullname" . -}}
-{{- $svcPort := .Values.service.apiPort -}}
+{{- $svcPort := .Values.service.apiPort | default "80" -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
