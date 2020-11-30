@@ -1,6 +1,6 @@
 apiVersion: v2
-name: be-common
-description: A Helm chart for backend common
+name: fe-common
+description: A Helm chart for frontend common
 type: library
 version: 0.0.1
 appVersion: 0.0.1

@@ -15,13 +15,13 @@ metadata:
 spec:
   rules:
   {{- if eq .Release.Namespace "prod" }}
-    - host: {{ printf "api.%s" .Values.service.apiHost | quote }}
+    - host: {{ printf "%s" .Values.service.apiHost | quote }}
   {{- else }}
-    - host: {{ printf "api.%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
+    - host: {{ printf "%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
   {{- end }}
       http:
         paths:
-          - path: /{{ .Chart.Name }}/graphql
+          - path: /{{ .Values.path }}
             pathType: Prefix
             backend:
               service:
