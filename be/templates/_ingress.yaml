@@ -8,8 +8,9 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -21,7 +22,7 @@ spec:
   {{- end }}
       http:
         paths:
-          - path: /{{ .Chart.Name }}/graphql
+          - path: /{{ .Chart.Name }}(/|$)(.*)
             pathType: Prefix
             backend:
               service:
