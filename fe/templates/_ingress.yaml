@@ -14,6 +14,14 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  tls:
+    - hosts:
+    {{- if eq .Release.Namespace "prod" }}
+      - {{ printf "%s" .Values.service.apiHost | quote }}
+    {{- else }}
+      - {{ printf "%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
+    {{- end }}
+      secretName: {{ .Release.Namespace }}-web-tls
   rules:
   {{- if eq .Release.Namespace "prod" }}
     - host: {{ printf "%s" .Values.service.apiHost | quote }}

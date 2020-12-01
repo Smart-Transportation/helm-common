@@ -9,11 +9,21 @@ metadata:
   labels:
     {{- include "labels" . | nindent 4 }}
   annotations:
+    kubernetes.io/ingress.class: "nginx"   
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  tls:
+    - hosts:
+    {{- if eq .Release.Namespace "prod" }}
+      - {{ printf "api.%s" .Values.service.apiHost | quote }}
+    {{- else }}
+      - {{ printf "api.%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
+    {{- end }}
+      secretName: {{ .Release.Namespace }}-api-tls
   rules:
   {{- if eq .Release.Namespace "prod" }}
     - host: {{ printf "api.%s" .Values.service.apiHost | quote }}
