@@ -63,3 +63,10 @@ This takes an array of three values:
 {{- $tpl := fromYaml (include (index . 2) $top) | default (dict ) -}}
 {{- toYaml (merge $overrides $tpl) -}}
 {{- end -}}
+
+{{- define "webpath" }}
+{{- $path := trimPrefix "web-" .Chart.Name -}}
+{{- if ne $path "root" -}}
+{{- $path -}}
+{{- end -}}
+{{- end -}}

@@ -9,7 +9,9 @@ metadata:
   labels:
     {{- include "labels" . | nindent 4 }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: "nginx"   
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -30,7 +32,7 @@ spec:
   {{- end }}
       http:
         paths:
-          - path: /{{ .Values.path }}(/|$)(.*)
+          - path: /{{- include "webpath" . }}(.*)
             pathType: Prefix
             backend:
               service:
