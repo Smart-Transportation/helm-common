@@ -28,7 +28,7 @@ spec:
       containers:
         - name: service
           image: "{{ .Values.image.repository }}/{{ .Chart.Name }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" | quote }}
           ports:
             - name: http
               containerPort: 3000
