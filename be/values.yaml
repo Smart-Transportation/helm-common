@@ -1,0 +1,7 @@
+service:
+  apiHost: "larditrans.eu"
+
+migration:
+  database:
+    url: jdbc:postgresql://dbs-postgresql.dbs.svc.cluster.local/postgres
+    user: root
