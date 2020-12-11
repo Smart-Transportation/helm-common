@@ -14,10 +14,11 @@ spec:
       {{- include "selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        timstamp: "{{ date "20060102150405" .Release.Time }}"
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "selectorLabels" . | nindent 8 }}
     spec:
