@@ -1,2 +1,4 @@
 service:
   apiHost: "larditrans.eu"
+  paths:
+    - graphql
