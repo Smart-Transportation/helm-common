@@ -2,6 +2,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "fullname" . -}}
 {{- $svcPort := .Values.service.apiPort | default "80" -}}
+{{- $charName := .Chart.Name -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -33,7 +34,7 @@ spec:
       http:
         paths:
           {{- range $i, $path := .Values.service.paths }}
-          - path: /{{ .Chart.Name }}(/|$)({{ $path }}.*)
+          - path: /{{ $charName }}(/|$)({{ $path }}.*)
             pathType: Prefix
             backend:
               service:
