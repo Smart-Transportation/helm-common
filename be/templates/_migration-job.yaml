@@ -7,6 +7,9 @@ metadata:
     {{- include "labels" . | nindent 4 }}
 spec:
   template:
+    metadata:
+      annotations:
+        timstamp: "{{ date "20060102150405" .Release.Time }}"
     spec:
       containers:
       - name: {{ .Chart.Name }}-migration
