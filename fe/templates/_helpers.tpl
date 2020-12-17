@@ -50,6 +50,29 @@ app.kubernetes.io/name: {{ include "name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+
+{{/*
+Generate api host
+*/}}
+{{- define "apihost" -}}
+{{- if eq .Release.Namespace "prod" }}
+{{- printf "api.%s" .Values.service.host | quote -}}
+{{- else }}
+{{- printf "api%s.%s" .Release.Namespace .Values.service.host | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate api host
+*/}}
+{{- define "webhost" -}}
+{{- if eq .Release.Namespace "prod" }}
+{{- printf "%s" .Values.service.host | quote -}}
+{{- else }}
+{{- printf "%s.%s" .Release.Namespace .Values.service.host | quote }}
+{{- end }}
+{{- end }}
+
 {{- /*
 mylibchart.util.merge will merge two YAML templates and output the result.
 This takes an array of three values:

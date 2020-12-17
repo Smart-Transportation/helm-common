@@ -2,6 +2,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "fullname" . -}}
 {{- $svcPort := .Values.service.port | default "80" -}}
+{{- $host := include "webhost" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -18,18 +19,10 @@ metadata:
 spec:
   tls:
     - hosts:
-    {{- if eq .Release.Namespace "prod" }}
-      - {{ printf "%s" .Values.service.apiHost | quote }}
-    {{- else }}
-      - {{ printf "%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
-    {{- end }}
+      - {{ $host }}
       secretName: {{ .Release.Namespace }}-web-tls
   rules:
-  {{- if eq .Release.Namespace "prod" }}
-    - host: {{ printf "%s" .Values.service.apiHost | quote }}
-  {{- else }}
-    - host: {{ printf "%s.%s" .Release.Namespace .Values.service.apiHost | quote }}
-  {{- end }}
+    - host: {{ $host }}
       http:
         paths:
           - path: /{{- include "webpath" . }}(.*)
