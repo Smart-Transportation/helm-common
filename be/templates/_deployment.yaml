@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        timstamp: "{{ date "20060102150405" .Release.Time }}"
+        timstamp: "{{ now | unixEpoch }}"
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
