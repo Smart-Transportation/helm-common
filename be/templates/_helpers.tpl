@@ -62,6 +62,17 @@ Generate api host
 {{- end }}
 {{- end }}
 
+{{/*
+Generate web host
+*/}}
+{{- define "webhost" -}}
+{{- if eq .Release.Namespace "prod" }}
+{{- printf "%s" .Values.service.host | quote -}}
+{{- else }}
+{{- printf "%s.%s" .Release.Namespace .Values.service.host | quote }}
+{{- end }}
+{{- end }}
+
 
 {{- /*
 mylibchart.util.merge will merge two YAML templates and output the result.

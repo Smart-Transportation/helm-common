@@ -45,6 +45,8 @@ spec:
               value: {{ .Release.Namespace }}
             - name: API_HOST
               value: {{ include "apihost" . }}
+            - name: WEB_HOST
+              value: {{ include "webhost" . }}
           {{- with .Values.env }}
           {{- range $key, $val := . }}
             - name: {{ $key }}

@@ -50,6 +50,8 @@ spec:
           env:
             - name: NAMESPACE
               value: {{ .Release.Namespace }}
+            - name: WEB_HOST
+              value: {{ include "webhost" . }}
           {{- with .Values.env }}
           {{- range $key, $val := . }}
             - name: {{ $key }}
