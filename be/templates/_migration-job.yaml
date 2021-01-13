@@ -40,7 +40,7 @@ spec:
           configMap:
             name: {{ include "fullname" . }}-conf-migration-configmap
       restartPolicy: Never
-  backoffLimit: 1
+  backoffLimit: 0
 {{- end -}}
 {{- define "common.migration-job" -}}
 {{- include "common.util.merge" (append . "common.migration-job.tpl") -}}
