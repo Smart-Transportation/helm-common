@@ -90,6 +90,6 @@ This takes an array of three values:
 {{- define "webpath" }}
 {{- $path := trimPrefix "web-" .Chart.Name -}}
 {{- if ne $path "root" -}}
-{{- $path -}}
+{{- printf "%s/?" $path -}}
 {{- end -}}
 {{- end -}}
