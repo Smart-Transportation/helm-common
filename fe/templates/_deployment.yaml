@@ -34,7 +34,7 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /{{- include "webpath" . }}
+              path: {{ default "/" .Values.readinessPath}}
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
