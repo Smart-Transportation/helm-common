@@ -30,7 +30,6 @@ spec:
       http:
         paths:
           - path: /{{- include "webpath" . }}(.*)
-            pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
