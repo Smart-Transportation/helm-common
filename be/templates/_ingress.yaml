@@ -30,6 +30,7 @@ spec:
         paths:
           {{- range $i, $path := .Values.service.paths }}
           - path: /{{ $charName }}(/|$)({{ $path }}.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ $fullName }}
