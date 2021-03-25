@@ -8,14 +8,18 @@ metadata:
 spec:
   type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
+    {{- if .Values.service.http }}
     - port: {{ .Values.service.apiPort | default "80" }}
       targetPort: http
       protocol: TCP
       name: http
+    {{- end }}
+    {{- if .Values.service.grpc }}
     - port: {{ .Values.service.grpcPort | default "9000" }}
       targetPort: grpc
       protocol: TCP
       name: grpc
+    {{- end }}
   selector:
     {{- include "selectorLabels" . | nindent 4 }}
 {{- end -}}
