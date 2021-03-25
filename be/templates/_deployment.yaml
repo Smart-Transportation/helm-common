@@ -34,9 +34,12 @@ spec:
               containerPort: 9000
               protocol: TCP
           {{- end }}
+          {{- if .Values.service.http }}
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- end }}
+          {{- if .Values.service.probe }}
           livenessProbe:
             httpGet:
               path: /health/live
@@ -45,6 +48,7 @@ spec:
             httpGet:
               path: /health/ready
               port: http
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:

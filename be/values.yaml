@@ -1,5 +1,7 @@
 service:
   grpc: true
+  http: true
+  probe: true
   host: "gogol.global"
   paths:
     - graphql
