@@ -12,6 +12,24 @@ metadata:
 spec:
   template:
     spec:
+      {{- if .Values.migration.database.create }}
+      initContainers:
+      - name: {{ .Chart.Name }}-migration-create-db
+        image: "docker.io/bitnami/postgresql:11"
+        command: ["/bin/entrypoint.sh"]
+        env:       
+          - name: PGHOST
+            value: {{ .Values.migration.database.host | quote }}
+          - name: PGUSER
+            value: {{ default "postgres" .Values.migration.database.postgresUser | quote }}
+          - name: PGPASSWORD
+            value: {{ default "postgres" .Values.migration.database.postgresPassword | quote }}
+        volumeMounts:
+          - name: createdb-script
+            mountPath: /bin/entrypoint.sh
+            readOnly: true
+            subPath: entrypoint.sh
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}-migration
         image: boxfuse/flyway:5.2.4
@@ -21,24 +39,25 @@ spec:
           - migrate
           - info
         env:
+          {{- with .Values.migration.database }}
           - name: FLYWAY_URL
-            value: {{ .Values.migration.database.url | quote }}
+            value: {{ printf "jdbc:postgresql://%s/%s-%s" .host $.Release.Namespace .name | quote }}
           - name: FLYWAY_USER
-            value: {{ .Values.migration.database.user | quote }}
+            value: {{ .user | quote }}
           - name: FLYWAY_PASSWORD
-            value: {{ .Values.migration.database.password | quote }} 
+            value: {{ .password | quote }} 
+          {{- end }}
         volumeMounts:
           - mountPath: /flyway/sql
             name: sql
-          - mountPath: /flyway/conf
-            name: conf
       volumes:
         - name: sql
           configMap:
             name: {{ include "fullname" . }}-sql-migration-configmap
-        - name: conf
+        - name: createdb-script
           configMap:
-            name: {{ include "fullname" . }}-conf-migration-configmap
+            defaultMode: 0755
+            name: {{ include "fullname" . }}-createdb-configmap
       restartPolicy: Never
   backoffLimit: 0
 {{- end -}}

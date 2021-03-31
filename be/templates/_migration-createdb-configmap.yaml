@@ -1,0 +1,21 @@
+{{- define "common.migration-createdb-configmap.tpl" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "fullname" . }}-createdb-configmap
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/resource-policy: keep
+    helm.sh/hook-weight: "1"
+data:
+  entrypoint.sh: |-
+    #!/bin/sh
+    USER={{ .Values.migration.database.user }}
+    DB="{{ printf "%s-%s" .Release.Namespace .Values.migration.database.name }}"
+    echo "SELECT 'CREATE DATABASE \"$DB\" WITH OWNER \"$USER\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB')\gexec" | psql
+{{- end -}}
+{{- define "common.migration-createdb-configmap" -}}
+{{- include "common.util.merge" (append . "common.migration-createdb-configmap.tpl") -}}
+{{- end -}}
