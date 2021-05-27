@@ -57,6 +57,8 @@ Generate api host
 {{- define "apihost" -}}
 {{- if eq .Release.Namespace "prod" }}
 {{- printf "api.%s" .Values.service.host | quote -}}
+{{- else if .Values.service.apiHost -}}
+{{- printf .Values.service.apiHost | quote }}
 {{- else }}
 {{- printf "api%s.%s" .Release.Namespace .Values.service.host | quote }}
 {{- end }}
