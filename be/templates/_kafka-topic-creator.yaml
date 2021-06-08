@@ -1,0 +1,28 @@
+{{- define "common.kafka-topic-creator.tpl" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  {{ include "fullname" . }}-kafka-topic-creator
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-kafka-topic-creator
+        image: bitnami/kafka:latest
+        command: [
+          "sh", 
+          "-c", 
+          "for t in {{ join " " .Values.kafka.topics}}; do /opt/bitnami/kafka/bin/kafka-topics.sh --create --if-not-exists --topic {{ .Release.Namespace }}-$t --bootstrap-server {{.Values.kafka.bootstrap}} --partitions {{.Values.kafka.partitions | default 1 }} --replication-factor {{.Values.kafka.replicas | default 1 }}; done"
+        ] 
+      restartPolicy: Never
+  backoffLimit: 0
+{{- end -}}
+{{- define "common.kafka-topic-creator" -}}
+{{- include "common.util.merge" (append . "common.kafka-topic-creator.tpl") -}}
+{{- end -}}
