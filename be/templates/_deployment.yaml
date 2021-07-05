@@ -42,11 +42,11 @@ spec:
           {{- if .Values.service.probe }}
           livenessProbe:
             httpGet:
-              path: /health/live
+              path: /q/health/live
               port: http
           readinessProbe:
             httpGet:
-              path: /health/ready
+              path: /q/health/ready
               port: http
           {{- end }}
           resources:
