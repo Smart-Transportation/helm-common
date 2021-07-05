@@ -42,11 +42,11 @@ spec:
           {{- if .Values.service.probe }}
           livenessProbe:
             httpGet:
-              path: /q/health/live
+              path: {{ .Values.service.livenessPath | default "/q/health/live" }}
               port: http
           readinessProbe:
             httpGet:
-              path: /q/health/ready
+              path: {{ .Values.service.readinessPath | default "/q/health/ready" }}
               port: http
           {{- end }}
           resources:
