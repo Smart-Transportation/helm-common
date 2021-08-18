@@ -15,6 +15,9 @@ data:
     USER={{ default .Values.migration.database.postgresUser .Values.migration.database.user }}
     DB="{{ printf "%s-%s" .Release.Namespace .Values.migration.database.name }}"
     echo "SELECT 'CREATE DATABASE \"$DB\" WITH OWNER \"$USER\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB')\gexec" | psql
+    {{- range .Values.migration.database.extensions }}
+    psql -d $DB -c "create extension if not exists {{ . }}"
+    {{- end }}
 {{- end -}}
 {{- define "common.migration-createdb-configmap" -}}
 {{- include "common.util.merge" (append . "common.migration-createdb-configmap.tpl") -}}
