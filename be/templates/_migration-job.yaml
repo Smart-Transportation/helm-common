@@ -41,7 +41,7 @@ spec:
         env:
           {{- with .Values.migration.database }}
           - name: FLYWAY_URL
-            value: {{ printf "jdbc:postgresql://%s/%s-%s" .host $.Release.Namespace .name | quote }}
+            value: {{ printf "jdbc:postgresql://%s/%s-%s" .host $.Release.Namespace (default .name $.Chart.Name) | quote }}
           - name: FLYWAY_USER
             value: {{ .user | quote }}
           - name: FLYWAY_PASSWORD

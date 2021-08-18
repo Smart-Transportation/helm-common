@@ -13,7 +13,7 @@ data:
   entrypoint.sh: |-
     #!/bin/sh
     USER={{ default .Values.migration.database.postgresUser .Values.migration.database.user }}
-    DB="{{ printf "%s-%s" .Release.Namespace .Values.migration.database.name }}"
+    DB="{{ printf "%s-%s" .Release.Namespace (default .Values.migration.database.name .Chart.Name) }}"
     echo "SELECT 'CREATE DATABASE \"$DB\" WITH OWNER \"$USER\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB')\gexec" | psql
     {{- range .Values.migration.database.extensions }}
     psql -d $DB -c "create extension if not exists {{ . }}"
