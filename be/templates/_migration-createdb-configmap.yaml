@@ -12,7 +12,7 @@ metadata:
 data:
   entrypoint.sh: |-
     #!/bin/sh
-    USER={{ .Values.migration.database.owner | default .Values.migration.database.user }}
+    USER={{ default .Values.migration.database.postgresUser .Values.migration.database.user }}
     DB="{{ printf "%s-%s" .Release.Namespace .Values.migration.database.name }}"
     echo "SELECT 'CREATE DATABASE \"$DB\" WITH OWNER \"$USER\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB')\gexec" | psql
 {{- end -}}
