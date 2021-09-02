@@ -11,7 +11,7 @@ data:
   pgbouncer.ini: |
     [databases]
 {{- range $key, $val := .Values.config.databases }}
-    {{ $key }} ={{ range $k, $v := $val }} {{ $k }}={{ Release.Namespace }}-{{ $v }}{{ end }}
+    {{ $key }} ={{ range $k, $v := $val }} {{ $k }}={{ .Release.Namespace }}-{{ $v }}{{ end }}
 {{- end }}
 
     [pgbouncer]
