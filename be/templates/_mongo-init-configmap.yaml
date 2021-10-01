@@ -1,0 +1,17 @@
+{{- define "common.mongo-init-configmap.tpl" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "fullname" . }}-mongo-init-configmap
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/resource-policy: keep
+    helm.sh/hook-weight: "1"
+data:
+  {{- (.Files.Glob "mongo/**.js").AsConfig | nindent 2 }}
+{{- end -}}
+{{- define "common.mongo-init-configmap" -}}
+{{- include "common.util.merge" (append . "common.mongo-init-configmap.tpl") -}}
+{{- end -}}
