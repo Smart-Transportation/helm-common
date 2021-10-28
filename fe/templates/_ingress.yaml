@@ -18,6 +18,7 @@ metadata:
     {{- else }} 
     nginx.ingress.kubernetes.io/cors-allow-origin: "*.{{ .Values.service.host }}"
     {{- end }} 
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header Accept-Language uk_UA;
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
