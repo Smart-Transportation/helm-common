@@ -90,8 +90,12 @@ This takes an array of three values:
 {{- end -}}
 
 {{- define "webpath" }}
+{{- if .Values.ingress.overridePath -}}
+{{- printf "%s" .Values.ingress.overridePath -}}
+{{- else -}}
 {{- $path := trimPrefix "web-" .Chart.Name -}}
 {{- if ne $path "root" -}}
-{{- printf "%s" $path -}}
+{{- printf "/%s" $path -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
