@@ -94,7 +94,9 @@ This takes an array of three values:
 {{- printf "%s" .Values.ingress.overridePath -}}
 {{- else -}}
 {{- $path := trimPrefix "web-" .Chart.Name -}}
-{{- if ne $path "root" -}}
+{{- if eq $path "root" -}}
+{{- "/" -}}
+{{- else -}}
 {{- printf "/%s" $path -}}
 {{- end -}}
 {{- end -}}
