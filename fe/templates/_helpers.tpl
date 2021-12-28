@@ -55,10 +55,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Generate api host
 */}}
 {{- define "apihost" -}}
-{{- if eq .Release.Namespace "prod" }}
-{{- printf "api.%s" .Values.service.host | quote -}}
-{{- else if .Values.service.apiHost -}}
+{{- if .Values.service.apiHost }}
 {{- printf .Values.service.apiHost | quote }}
+{{- else if eq .Release.Namespace "prod" -}}
+{{- printf "api.%s" .Values.service.host | quote -}}
 {{- else }}
 {{- printf "api%s.%s" .Release.Namespace .Values.service.host | quote }}
 {{- end }}
