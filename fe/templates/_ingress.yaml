@@ -10,7 +10,6 @@ metadata:
   labels:
     {{- include "labels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: "nginx"   
     nginx.ingress.kubernetes.io/rewrite-target: {{ default "/" .Values.ingress.basePath }}$1
     nginx.ingress.kubernetes.io/enable-cors: "true"
     {{- if .Values.ingress.corsHttpOrigin }}
@@ -26,6 +25,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ingressClassName: "nginx" 
   tls:
     - hosts:
       - {{ $host }}
