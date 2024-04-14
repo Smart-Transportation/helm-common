@@ -1,3 +1,6 @@
+image:
+  pullSecret: letsgo
+
 service:
   grpc: true
   http: true
