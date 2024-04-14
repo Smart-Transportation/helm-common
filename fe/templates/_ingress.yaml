@@ -15,7 +15,7 @@ metadata:
     {{- if .Values.ingress.corsHttpOrigin }}
     nginx.ingress.kubernetes.io/cors-allow-origin: "$http_origin"
     {{- else }} 
-    nginx.ingress.kubernetes.io/cors-allow-origin: "http(s)://*.{{ .Values.service.host }}"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.{{ .Values.service.host }},http://*.{{ .Values.service.host }}"
     {{- end }} 
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
