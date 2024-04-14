@@ -22,8 +22,8 @@ spec:
       labels:
         {{- include "selectorLabels" . | nindent 8 }}
     spec:
-      # imagePullSecrets:
-      #   - name: registry-letsgo
+      imagePullSecrets:
+        - name: letsgo
       containers:
         - name: service
           image: "{{ .Values.image.repository }}/{{ .Chart.Name }}:{{ .Values.image.tag }}"
