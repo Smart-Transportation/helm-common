@@ -1,5 +1,2 @@
 service:
   host: "gogol.global"
-
-image:
-  pullSecret: letsgo
